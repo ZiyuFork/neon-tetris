@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#070c1b">
+<title>霓虹俄罗斯方块</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Microsoft YaHei",sans-serif;--bg:#070c1b;--soft:#101c34;--cyan:#55e9ff}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:#eaf8ff}
+body{overflow-x:hidden;background:radial-gradient(circle at 16% 12%,#152d52 0,transparent 37%),radial-gradient(circle at 84% 69%,#281a47 0,transparent 45%),#070c1b}
+.app{max-width:900px;min-height:100dvh;margin:auto;padding:12px 14px max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:10px}
+h1{font-size:clamp(20px,4vw,36px);letter-spacing:.12em;margin:4px 0 0;text-shadow:0 0 18px #48dbfebb;color:#f3feff;text-align:center}
+.tagline{font-size:12px;letter-spacing:.24em;color:#7bb6d0;margin:0 0 3px}
+.stage{display:flex;justify-content:center;align-items:stretch;gap:12px;width:100%;min-height:0}
+.board-wrap{position:relative;flex:none;border:2px solid #48dfff;border-radius:12px;padding:5px;background:#091426;box-shadow:0 0 12px #48dfff88,0 0 36px #2784dd44;line-height:0}
+canvas#board{display:block;width:var(--board-width);height:var(--board-height);border-radius:5px;touch-action:none}
+.side{width:clamp(116px,27vw,215px);display:flex;flex-direction:column;gap:10px}
+.card{background:linear-gradient(145deg,#142441,#0e172d);border:1px solid #335477;border-radius:12px;padding:10px;box-shadow:inset 0 1px #5abaff28}
+.label{color:#85abc8;font-weight:700;font-size:11px;letter-spacing:.14em}.number{font-size:clamp(20px,4vw,35px);font-weight:800;margin-top:3px;color:#fff;text-shadow:0 0 13px #37e3ff55}
+#next{display:block;width:100%;height:85px;margin:3px auto 0}.hint{margin-top:auto;font-size:12px;line-height:1.8;color:#9dbbd0}.hint strong{color:#73f1ff}
+.controls{width:min(100%,530px);display:grid;grid-template-columns:repeat(4,1fr);gap:8px;touch-action:none;user-select:none}
+button{font:inherit;border:1px solid #4787aa;color:#ecfaff;background:linear-gradient(#203c5c,#132b4a);border-radius:12px;padding:12px 3px;min-height:51px;cursor:pointer;box-shadow:0 4px #091528,0 0 15px #158ff833;-webkit-tap-highlight-color:transparent;touch-action:none}
+button:active,.pressed{transform:translateY(3px);box-shadow:0 1px #091528;background:#21557a}.drop{border-color:#ca82ff;background:linear-gradient(#503476,#372453)}.secondary{font-size:12px;padding:8px;min-height:35px}
+.bottom{display:flex;gap:8px;width:min(100%,530px)}.bottom button{flex:1}
+.overlay{position:absolute;inset:5px;border-radius:6px;background:#071427d9;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;text-align:center;padding:12px;line-height:1.4;z-index:2}.overlay[hidden]{display:none}.overlay strong{font-size:clamp(20px,4vw,30px);color:#7df5ff;text-shadow:0 0 15px #50dfff}.overlay span{font-size:14px;color:#c5d9ea}.overlay button{padding:8px 24px}
+footer{font-size:11px;color:#718ea7;text-align:center}
+@media(max-width:480px){.app{gap:8px;padding:8px 7px max(9px,env(safe-area-inset-bottom))}.stage{gap:7px}.board-wrap{padding:3px;border-radius:8px}.side{gap:6px}.card{padding:6px;border-radius:9px}.hint{font-size:10px;line-height:1.5}#next{height:58px}.controls{gap:6px}button{min-height:48px;padding:9px 1px}.secondary{min-height:32px}}
+</style>
+</head>
+<body>
+<main class="app">
+<h1>霓虹俄罗斯方块</h1><p class="tagline">NEON TETRIS</p>
+<div class="stage">
+ <div class="board-wrap"><canvas id="board" aria-label="俄罗斯方块棋盘"></canvas><div class="overlay" id="overlay"><strong id="overlayTitle">准备好了吗？</strong><span id="overlayHint">排满一整行就能消除！</span><button id="start">开始游戏</button></div></div>
+ <aside class="side"><div class="card"><div class="label">分数 SCORE</div><div class="number" id="score">0</div></div><div class="card"><div class="label">消除 LINES</div><div class="number" id="lines">0</div></div><div class="card"><div class="label">下一块 NEXT</div><canvas id="next"></canvas></div><div class="card hint"><strong>操作</strong><br>◀ ▶ 移动<br>⟳ 旋转<br>▼ 加速<br>⬇ 落到底</div></aside>
+</div>
+<div class="controls"><button data-action="left" aria-label="向左">◀</button><button data-action="rotate" aria-label="旋转">⟳</button><button data-action="right" aria-label="向右">▶</button><button data-action="down" aria-label="加速下落">▼</button></div>
+<div class="bottom"><button class="drop" data-action="drop">⬇ 落到底</button><button class="secondary" id="pause">暂停</button><button class="secondary" id="restart">重来</button></div>
+<footer>电脑：← → 移动 · ↑ 旋转 · ↓ 加速 · 空格落底 · P 暂停 · R 重来</footer>
+</main>
+<script>
+"use strict";
+const COLS=10,ROWS=20;
+const shapes=[[[0,1],[1,1],[2,1],[3,1]],[[0,0],[1,0],[0,1],[1,1]],[[1,0],[0,1],[1,1],[2,1]],[[1,0],[2,0],[0,1],[1,1]],[[0,0],[1,0],[1,1],[2,1]],[[0,0],[0,1],[1,1],[2,1]],[[2,0],[0,1],[1,1],[2,1]]];
+const colors=['#38dfff','#ffe066','#be8aff','#4dffc3','#ff6fa7','#6e9bff','#ffae65'];
+const boardEl=document.getElementById('board'),nextEl=document.getElementById('next');
+const ctx=boardEl.getContext('2d'),nextCtx=nextEl.getContext('2d');
+let board,bag,current,next,score,lines,running=false,paused=false,over=false,cell=20;
+let lastTime=0,accumulator=0;
+function empty(){return Array.from({length:ROWS},()=>Array(COLS).fill(-1))}
+function randomPiece(){if(!bag.length){bag=[0,1,2,3,4,5,6];for(let i=bag.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[bag[i],bag[j]]=[bag[j],bag[i]]}}let kind=bag.pop();return{kind,shape:shapes[kind].map(p=>p.slice()),x:3,y:-1}}
+function valid(piece,x=piece.x,y=piece.y,shape=piece.shape){return shape.every(([dx,dy])=>{let px=x+dx,py=y+dy;return px>=0&&px<COLS&&py<ROWS&&(py<0||board[py][px]===-1)})}
+function spawn(){current=next;current.x=3;current.y=-1;next=randomPiece();if(!valid(current)){over=true;running=false;show('游戏结束','得分 '+score+' · 再来一局？','重新开始')}}
+function reset(){board=empty();bag=[];score=0;lines=0;over=false;paused=false;running=true;next=randomPiece();spawn();accumulator=0;lastTime=performance.now();hide();update();draw()}
+function show(title,hint,button){document.getElementById('overlayTitle').textContent=title;document.getElementById('overlayHint').textContent=hint;document.getElementById('start').textContent=button;document.getElementById('overlay').hidden=false}
+function hide(){document.getElementById('overlay').hidden=true}
+function update(){document.getElementById('score').textContent=score;document.getElementById('lines').textContent=lines;document.getElementById('pause').textContent=paused?'继续':'暂停'}
+function lock(){for(const [dx,dy] of current.shape){let x=current.x+dx,y=current.y+dy;if(y<0){over=true;running=false;show('游戏结束','得分 '+score+' · 再来一局？','重新开始');draw();return}board[y][x]=current.kind}let remaining=board.filter(row=>row.includes(-1)),cleared=ROWS-remaining.length;board=[...Array.from({length:cleared},()=>Array(COLS).fill(-1)),...remaining];lines+=cleared;score+=[0,100,300,500,800][cleared]*(1+Math.floor(lines/10));spawn();update()}
+function move(dx,dy){if(!valid(current,current.x+dx,current.y+dy))return false;current.x+=dx;current.y+=dy;return true}
+function step(){if(!move(0,1))lock()}
+function rotate(){const turned=current.shape.map(([x,y])=>[2-y,x]);for(const offset of [0,-1,1,-2,2])if(valid(current,current.x+offset,current.y,turned)){current.x+=offset;current.shape=turned;break}}
+function action(name){if(name==='pause'){if(!running||over)return;paused=!paused;if(paused)show('已暂停','休息一下，随时继续','继续游戏');else{hide();lastTime=performance.now()}update();draw();return}if(name==='restart'){reset();return}if(!running||paused||over)return;switch(name){case 'left':move(-1,0);break;case 'right':move(1,0);break;case 'rotate':rotate();break;case 'down':if(move(0,1)){score++;update()}else lock();break;case 'drop':while(move(0,1))score+=2;lock();update();break}draw()}
+function tile(context,x,y,s,color,ghost=false){let p=Math.max(1,s*.08);if(ghost){context.strokeStyle=color;context.lineWidth=Math.max(1,s*.08);context.strokeRect(x+p*2,y+p*2,s-p*4,s-p*4);return}context.shadowColor=color;context.shadowBlur=s*.36;context.fillStyle=color;context.fillRect(x+p,y+p,s-p*2,s-p*2);context.shadowBlur=0;context.fillStyle='#ffffff55';context.fillRect(x+p*2,y+p*2,s-p*4,Math.max(2,s*.09));context.strokeStyle='#ffffff55';context.lineWidth=1;context.strokeRect(x+p,y+p,s-p*2,s-p*2)}
+function fitCanvas(el,context,w,h){let dpr=Math.min(devicePixelRatio||1,2);el.width=Math.round(w*dpr);el.height=Math.round(h*dpr);context.setTransform(dpr,0,0,dpr,0,0)}
+function resize(){let stage=document.querySelector('.stage'),wrap=document.querySelector('.board-wrap'),side=document.querySelector('.side');let availW=stage.clientWidth-side.offsetWidth-12;let availH=Math.max(330,window.innerHeight-235);cell=Math.max(12,Math.floor(Math.min(availW/COLS,availH/ROWS)));let w=cell*COLS,h=cell*ROWS;wrap.style.setProperty('--board-width',w+'px');wrap.style.setProperty('--board-height',h+'px');fitCanvas(boardEl,ctx,w,h);let nw=nextEl.clientWidth||100,nh=nextEl.clientHeight||70;fitCanvas(nextEl,nextCtx,nw,nh);draw()}
+function draw(){if(!board)return;let w=cell*COLS,h=cell*ROWS;ctx.clearRect(0,0,w,h);for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){ctx.fillStyle=(x+y)%2?'#111c34':'#14213b';ctx.fillRect(x*cell,y*cell,cell,cell);ctx.strokeStyle='#223552';ctx.strokeRect(x*cell+.5,y*cell+.5,cell-1,cell-1);if(board[y][x]!==-1)tile(ctx,x*cell,y*cell,cell,colors[board[y][x]])}if(current&&!over){let gy=current.y;while(valid(current,current.x,gy+1))gy++;for(const [dx,dy] of current.shape){let x=current.x+dx,y=gy+dy;if(y>=0)tile(ctx,x*cell,y*cell,cell,colors[current.kind],true)}for(const [dx,dy] of current.shape){let x=current.x+dx,y=current.y+dy;if(y>=0)tile(ctx,x*cell,y*cell,cell,colors[current.kind])}}let nw=nextEl.clientWidth,nh=nextEl.clientHeight;nextCtx.clearRect(0,0,nw,nh);if(next){let s=Math.min(20,nw/4.4,nh/3.2);for(const [dx,dy]of next.shape)tile(nextCtx,(nw-3*s)/2+dx*s,(nh-3*s)/2+dy*s,s,colors[next.kind])}}
+function frame(now){let dt=Math.min(now-lastTime,100);lastTime=now;if(running&&!paused&&!over){accumulator+=dt;let interval=Math.max(100,600-Math.floor(lines/10)*55);if(accumulator>=interval){accumulator=0;step();draw()}}requestAnimationFrame(frame)}
+document.getElementById('start').addEventListener('click',()=>paused?action('pause'):reset());
+document.getElementById('pause').addEventListener('click',()=>action('pause'));
+document.getElementById('restart').addEventListener('click',()=>action('restart'));
+for(const button of document.querySelectorAll('[data-action]')){let repeating=null,act=button.dataset.action;button.addEventListener('pointerdown',event=>{event.preventDefault();button.setPointerCapture(event.pointerId);action(act);button.classList.add('pressed');if(['left','right','down'].includes(act))repeating=setInterval(()=>action(act),110)});const end=()=>{button.classList.remove('pressed');clearInterval(repeating);repeating=null};button.addEventListener('pointerup',end);button.addEventListener('pointercancel',end);button.addEventListener('lostpointercapture',end)}
+document.addEventListener('keydown',event=>{const keys={ArrowLeft:'left',ArrowRight:'right',ArrowUp:'rotate',ArrowDown:'down',' ':'drop',p:'pause',P:'pause',r:'restart',R:'restart'};let act=keys[event.key];if(act){event.preventDefault();if(!event.repeat||['left','right','down'].includes(act))action(act)}});
+window.addEventListener('resize',resize);
+board=empty();bag=[];next=randomPiece();current=null;score=0;lines=0;resize();requestAnimationFrame(frame);
+</script>
+</body></html>
