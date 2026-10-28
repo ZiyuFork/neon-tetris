@@ -3,48 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f3ecd7">
-<meta name="description" content="纸张与墨绿之间的俄罗斯方块，配有可关闭的轻柔音乐和消除音效。">
-<title>晴空方块 · 俄罗斯方块</title>
+<meta name="theme-color" content="#111728">
+<meta name="description" content="经典俄罗斯方块。移动、旋转、消除，配有可关闭的音乐和音效。">
+<title>俄罗斯方块 · TETRIS</title>
 <style>
-:root{color-scheme:light;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#405b4e;background:#f3ecd7;font-synthesis:none;--paper:#f3ecd7;--ink:#405b4e;--green:#617f6b;--line:#bdc5ab;--quiet:#7b8775}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;min-height:100dvh;background-color:var(--paper);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%2375653b' opacity='.055' filter='url(%23grain)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");overflow-x:hidden}
-button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button,button *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}button:focus-visible{outline:2px solid var(--green);outline-offset:4px}button:disabled{cursor:default;opacity:.45}button:active:not(:disabled),button.pressed{transform:translateY(1px);background:#dce2c9}button.primary:active,button.drop:active{background:#425f4d}[hidden]{display:none!important}
-.icon{display:inline-block;width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;pointer-events:none}.key-icon{width:30px}.app{position:relative;width:min(100%,430px);margin:auto;padding:20px 18px max(16px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:10px}
-.heading{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px}.brand{display:flex;gap:12px;align-items:center}.logo{display:grid;grid-template-columns:repeat(2,10px);gap:2px}.logo i{width:10px;height:10px;background:var(--green)}.logo i:first-child{visibility:hidden}h1{font-family:"Songti SC","STSong","Noto Serif CJK SC",serif;font-size:26px;letter-spacing:.09em;margin:0;font-weight:600}.subtitle{margin:4px 0 0;font-size:9px;letter-spacing:.17em;color:var(--quiet)}.help{border:1px solid var(--line);background:transparent;color:var(--ink);font-size:11px;padding:7px 10px;min-height:36px;border-radius:2px}
-.scorebar{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0 9px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.score-label{font-size:10px;letter-spacing:.14em;color:var(--quiet)}.score{font-family:Georgia,"Times New Roman",serif;font-size:36px;line-height:1.05;letter-spacing:.02em;font-weight:400;color:var(--ink);font-variant-numeric:tabular-nums}.sound-controls{display:flex;gap:9px}.toggle{display:flex;align-items:center;gap:5px;border:0;background:transparent;padding:9px 4px;min-height:38px;border-radius:0;font-size:11px;color:var(--ink);white-space:nowrap}.toggle .icon{width:16px;height:16px}.toggle span{font-size:9px;border-bottom:1px solid var(--green);padding-bottom:1px;margin-left:1px}.toggle[aria-pressed="false"]{color:var(--quiet)}.toggle[aria-pressed="false"] span{border-color:transparent}
-.milestones{display:flex;width:100%;justify-content:space-between;gap:6px}.milestone{flex:1;text-align:center;padding:2px 0;color:var(--quiet);font-size:9px;letter-spacing:.01em;border-bottom:2px solid transparent}.milestone b{font-weight:500}.milestone.achieved{color:var(--ink);border-bottom-color:var(--green)}
-.board-wrap{position:relative;padding:8px;border:1px solid #819681;border-radius:2px;background:#e8e8ce;line-height:0;isolation:isolate}#board{display:block;width:var(--board-width,260px);height:var(--board-height,520px);border-radius:0;touch-action:none;background:#f0ecd6}#board:focus{outline:none}#board:focus-visible{outline:1px solid var(--green);outline-offset:3px}
-.celebration{position:absolute;z-index:2;left:-12px;right:-12px;top:36%;text-align:center;pointer-events:none;line-height:1.35}.celebration strong{display:block;font-family:Georgia,"Times New Roman",serif;font-size:clamp(33px,8vw,46px);font-weight:400;letter-spacing:-.025em;color:var(--ink);background:#f3ecd7f5;padding:12px 10px 0;border-top:1px solid var(--green)}.celebration span{display:block;padding:5px 12px 13px;background:#f3ecd7f5;color:var(--green);font-size:12px;border-bottom:1px solid var(--green)}.celebration.pop{animation:celebrate 2.2s both}@keyframes celebrate{0%{opacity:0;transform:translateY(8px)}12%,84%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-8px)}}
-.controls{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;touch-action:none;user-select:none}.control{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid #9dab92;border-radius:2px;min-height:46px;background:#ecebd3;color:var(--ink)}.control small{font-size:10px}.control.rotate{background:#dee4cc}.bottom{display:grid;width:100%;grid-template-columns:1.65fr 1fr 1fr;gap:7px}.bottom button{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid #9dab92;border-radius:2px;background:transparent;color:var(--ink);min-height:41px;font-size:12px}.bottom .drop{background:var(--green);color:var(--paper);border-color:var(--green);font-weight:500}.bottom .icon{width:18px;height:18px}.footer{margin:1px 0 0;color:var(--quiet);font-size:9px;letter-spacing:.12em;text-align:center}
-.modal{position:fixed;inset:0;z-index:10;padding:20px;display:flex;align-items:center;justify-content:center;background:#344b3b50}.dialog{position:relative;width:min(100%,378px);max-height:calc(100dvh - 40px);overflow:auto;border-radius:2px;border:1px solid #87987e;padding:28px 26px 23px;background:#f6efd9;box-shadow:6px 6px 0 #344b3b12;text-align:left}.dialog::before{content:"";position:absolute;left:26px;right:26px;top:17px;height:2px;background:var(--green)}.eyebrow{font-size:10px;letter-spacing:.2em;color:var(--quiet);margin:4px 0 14px}.dialog h2{font-family:"Songti SC","STSong","Noto Serif CJK SC",serif;font-size:30px;line-height:1.3;margin:0;color:var(--ink);font-weight:500;letter-spacing:.08em}.dialog-desc{font-size:12px;color:#697b66;line-height:1.9;margin:15px 0 20px}.instructions{display:grid;text-align:left;margin:0 0 18px;border-top:1px solid var(--line);counter-reset:steps}.instruction{counter-increment:steps;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--ink);border-bottom:1px solid var(--line);padding:12px 0}.instruction::before{content:"0" counter(steps);font-family:Georgia,serif;font-size:11px;color:#89937c;align-self:flex-start;margin-top:4px}.instruction b{min-width:38px;display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:400}.instruction span{flex:1}.instruction small{display:block;font-size:10px;color:var(--quiet);margin-top:4px;line-height:1.5}.scoring{font-size:10px;color:#71816b;margin:0 0 20px;line-height:1.9}.primary{display:flex;align-items:center;justify-content:space-between;width:100%;border:1px solid var(--green);border-radius:2px;min-height:47px;padding:0 16px;background:var(--green);color:#faf3de;font-size:13px;font-weight:500;letter-spacing:.06em}.audio-note{font-size:10px;color:var(--quiet);margin:14px 0 0;line-height:1.7}
-@media(max-width:360px){.app{padding:12px 12px max(12px,env(safe-area-inset-bottom));gap:8px}h1{font-size:23px}.scorebar{padding:8px 0}.toggle{gap:4px;padding:7px 2px}.sound-controls{gap:5px}.control small{display:none}.dialog{padding:26px 20px 20px}.dialog::before{left:20px;right:20px}.score{font-size:31px}.milestone{font-size:8px}.instruction{gap:8px}}
-@media(max-height:720px){.app{padding-top:10px;gap:7px}.heading h1{font-size:22px}.scorebar{padding:6px 0}.score{font-size:29px}.control{min-height:42px}.bottom button{min-height:36px}.footer{font-size:8px}.dialog{padding-top:25px}.dialog-desc{margin:10px 0 14px}.instruction{padding:9px 0}}
+:root{color-scheme:dark;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;color:#eaf3ff;background:#111728;font-synthesis:none;--accent:#42d9ef;--line:#334965;--quiet:#a0b3cd}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;min-height:100dvh;background:#111728;background-image:linear-gradient(#26324a35 1px,transparent 1px),linear-gradient(90deg,#26324a35 1px,transparent 1px);background-size:32px 32px;overflow-x:hidden}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button,button *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}button:focus-visible{outline:2px solid var(--accent);outline-offset:4px}button:disabled{cursor:default;opacity:.45}button:active:not(:disabled),button.pressed{transform:translateY(2px);box-shadow:none;background:#263e5c}[hidden]{display:none!important}
+.icon{display:inline-block;width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:square;stroke-linejoin:miter;vertical-align:middle;pointer-events:none}.app{position:relative;width:min(100%,430px);margin:auto;padding:18px 18px max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:12px}
+.heading{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px}.brand{display:flex;align-items:center}h1{font-family:ui-monospace,"Courier New",monospace;font-size:29px;font-weight:900;line-height:1.2;letter-spacing:.08em;margin:0;text-shadow:2px 3px #050912}h1 span:nth-child(1){color:#40d7f0}h1 span:nth-child(2){color:#ffbe37}h1 span:nth-child(3){color:#b583ff}h1 span:nth-child(4){color:#66de84}h1 span:nth-child(5){color:#ff647c}h1 span:nth-child(6){color:#5e96ff}.help{border:1px solid var(--line);background:#19243a;color:var(--quiet);font-size:12px;min-height:34px;padding:6px 12px;border-radius:2px}
+.scorebar{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.score-label{font-size:10px;letter-spacing:.14em;color:var(--quiet)}.score{font-family:ui-monospace,"Courier New",monospace;font-size:33px;line-height:1.1;font-weight:700;font-variant-numeric:tabular-nums;color:#fff}.sound-controls{display:flex;gap:8px}.toggle{position:relative;display:grid;place-items:center;width:38px;height:38px;border:1px solid #476183;background:#1c2d46;border-radius:2px;color:#7ce4ee}.toggle[aria-pressed="false"]{color:#7e91af;background:#172134;border-color:#33445e}.toggle[aria-pressed="false"]::after{content:"";position:absolute;width:25px;height:2px;background:currentColor;transform:rotate(-45deg);box-shadow:0 0 0 2px #172134}
+.board-wrap{position:relative;padding:8px;border:1px solid #4e6a8d;border-radius:1px;background:#1b2b44;line-height:0;isolation:isolate;box-shadow:4px 4px 0 #070c17}#board{display:block;width:var(--board-width,260px);height:var(--board-height,520px);border-radius:0;touch-action:none;background:#080f1e}#board:focus{outline:none}#board:focus-visible{outline:1px solid var(--accent);outline-offset:3px}
+.celebration{position:absolute;z-index:2;left:0;right:0;top:36%;text-align:center;pointer-events:none;line-height:1.25;padding:12px 4px;background:#101c32ed;border-top:2px solid #ffd24c;border-bottom:2px solid #ffd24c}.celebration strong{display:block;font-family:ui-monospace,"Courier New",monospace;font-size:clamp(28px,8vw,40px);font-weight:900;letter-spacing:-.04em;color:#ffdb65}.celebration span{display:block;padding-top:5px;color:#d4e4f7;font-size:12px}.celebration.pop{animation:celebrate 2.2s both}@keyframes celebrate{0%{opacity:0;transform:scale(.9)}12%,84%{opacity:1;transform:scale(1)}100%{opacity:0;transform:translateY(-8px)}}
+.controls{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;touch-action:none;user-select:none}.control{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid #466387;border-radius:2px;min-height:47px;background:#1b2c45;color:#dceaff;box-shadow:0 3px 0 #070d19}.control small{font-size:11px}.control.rotate{color:#d2b4ff}.bottom{display:grid;width:100%;grid-template-columns:1.65fr 1fr 1fr;gap:8px}.bottom button{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid #3f5674;border-radius:2px;background:#19263d;color:#b6c9e3;min-height:41px;font-size:12px;box-shadow:0 3px 0 #070d19}.bottom .drop{background:#ffd04a;color:#172034;border-color:#ffe28c;font-weight:700}.bottom .drop:active{background:#e2b83d}.bottom .icon{width:19px;height:19px}
+.modal{position:fixed;inset:0;z-index:10;padding:20px;display:flex;align-items:center;justify-content:center;background:#050915cb}.dialog{position:relative;width:min(100%,354px);max-height:calc(100dvh - 40px);overflow:auto;border:2px solid #4b688d;border-radius:2px;padding:25px 20px 20px;background:#142139;box-shadow:7px 7px 0 #050a14;text-align:center}.mini-piece{display:grid;grid-template-columns:repeat(3,15px);grid-template-rows:repeat(2,15px);gap:2px;justify-content:center;margin:0 auto 16px}.mini-piece i{display:block;background:#b583ff;border:2px solid #d1b0ff;box-shadow:inset -2px -2px #7048b7}.mini-piece i:first-child{grid-column:2}.mini-piece i:nth-child(2){grid-column:1;grid-row:2}.mini-piece i:nth-child(3){grid-column:2;grid-row:2}.mini-piece i:nth-child(4){grid-column:3;grid-row:2}.dialog h2{font-size:24px;line-height:1.3;margin:0;color:#f6f9ff;font-weight:800;letter-spacing:.08em}.dialog-desc{font-size:12px;color:#a8bbd5;line-height:1.6;margin:10px 0 0}.instructions{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:23px 0}.instruction{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:11px;color:#c7d6eb;white-space:nowrap}.instruction b{display:grid;place-items:center;width:39px;height:39px;border:1px solid #4a6385;background:#1d304c;color:#73dfea;box-shadow:0 2px 0 #080f20}.instruction:nth-child(2) b{color:#d0afff}.instruction:last-child b{color:#ffda67}.instruction .icon{width:23px;height:23px}.primary{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:1px solid #86eef6;border-radius:1px;min-height:46px;padding:0 14px;background:#45d5e8;color:#101c31;font-size:14px;font-weight:800;letter-spacing:.08em;box-shadow:0 3px 0 #087786}.primary:active{background:#2cb8ce}
+@media(max-width:360px){.app{padding:12px 12px max(14px,env(safe-area-inset-bottom));gap:10px}h1{font-size:27px}.scorebar{padding:7px 0}.score{font-size:30px}.control{gap:4px}.control small{font-size:10px}.dialog{padding:23px 16px 18px}.instruction b{width:35px;height:37px}.instructions{gap:4px}.dialog h2{font-size:22px}}
+@media(max-height:720px){.app{padding-top:10px;gap:8px}.scorebar{padding:6px 0}.score{font-size:28px}.control{min-height:42px}.bottom button{min-height:36px}.dialog{padding-top:20px}.mini-piece{margin-bottom:12px}.instructions{margin:20px 0}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <main class="app" id="app" inert>
- <header class="heading"><div class="brand"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span><div><h1>晴空方块</h1><p class="subtitle">TETRIS</p></div></div><button class="help" id="help" aria-label="查看操作说明">玩法</button></header>
- <section class="scorebar" aria-label="分数与声音设置"><div><div class="score-label">本局得分</div><div class="score" id="score">0</div></div><div class="sound-controls"><button class="toggle" id="music" aria-pressed="true" aria-label="背景音乐，点击关闭">♫ 音乐<span>开</span></button><button class="toggle" id="sound" aria-pressed="true" aria-label="游戏音效，点击关闭">♪ 音效<span>开</span></button></div></section>
- <div class="milestones" aria-label="得分里程碑"><span class="milestone" data-score="2000">2000 · <b>Good</b></span><span class="milestone" data-score="5000">5000 · <b>Fantastic</b></span><span class="milestone" data-score="8000">8000 · <b>Perfect</b></span></div>
+ <header class="heading"><div class="brand"><h1 aria-label="俄罗斯方块"><span>T</span><span>E</span><span>T</span><span>R</span><span>I</span><span>S</span></h1></div><button class="help" id="help" aria-label="查看操作说明">玩法</button></header>
+ <section class="scorebar" aria-label="分数与声音设置"><div><div class="score-label">得分</div><div class="score" id="score">0</div></div><div class="sound-controls"><button class="toggle" id="music" aria-pressed="true" aria-label="背景音乐，点击关闭">♫ 音乐<span>开</span></button><button class="toggle" id="sound" aria-pressed="true" aria-label="游戏音效，点击关闭">♪ 音效<span>开</span></button></div></section>
  <div class="board-wrap" id="boardWrap"><canvas id="board" tabindex="0" role="img" aria-label="10 列 20 行的俄罗斯方块棋盘，方向键移动和旋转，空格直接落下"></canvas><div class="celebration" id="celebration" aria-live="polite" aria-atomic="true" hidden><strong id="cheerWord"></strong><span id="cheerDetail"></span></div></div>
  <div class="controls" aria-label="移动控制"><button class="control" data-action="left" aria-label="向左移动"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg> <small>向左</small></button><button class="control rotate" data-action="rotate" aria-label="旋转方块"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M19 8a8 8 0 1 0 1 7M19 3v5h-5"/></svg> <small>旋转</small></button><button class="control" data-action="right" aria-label="向右移动"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg> <small>向右</small></button><button class="control" data-action="down" aria-label="加速下落"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M12 4v15m-6-6 6 6 6-6"/></svg> <small>加速</small></button></div>
- <div class="bottom"><button class="drop" data-action="drop"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M12 3v13m-5-5 5 5 5-5M5 21h14"/></svg><span>直接落下</span></button><button id="pause">暂停</button><button id="restart">重新开始</button></div>
+ <div class="bottom"><button class="drop" data-action="drop" aria-label="直接落下"><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M12 3v13m-5-5 5 5 5-5M5 21h14"/></svg><span>落下</span></button><button id="pause">暂停</button><button id="restart">重来</button></div>
 </main>
 <div class="modal" id="modal">
  <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="dialogDesc">
-  <p class="eyebrow">俄罗斯方块 / 操作说明</p>
-  <h2 id="dialogTitle">开始之前</h2><p class="dialog-desc" id="dialogDesc">填满一整行即可消除。<br>方块堆到顶部时，本局结束。</p>
+  <div class="mini-piece" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <h2 id="dialogTitle">俄罗斯方块</h2><p class="dialog-desc" id="dialogDesc">排满一行，即可消除</p>
   <div class="instructions" id="instructions">
-   <div class="instruction"><b><svg class="icon key-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M3 12h18M7 8l-4 4 4 4m10-8 4 4-4 4"/></svg></b><span>左右移动<small>电脑 ← → 键；手机按住可连续移动</small></span></div>
-   <div class="instruction"><b><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M19 8a8 8 0 1 0 1 7M19 3v5h-5"/></svg></b><span>旋转方块<small>电脑 ↑ 键；手机点旋转按钮</small></span></div>
-   <div class="instruction"><b><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M12 4v15m-6-6 6 6 6-6"/></svg></b><span>加速下落<small>电脑 ↓ 键；手机按住向下按钮</small></span></div>
-   <div class="instruction"><b><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M12 3v13m-5-5 5 5 5-5M5 21h14"/></svg></b><span>直接落到底<small>电脑空格键；手机点落下按钮</small></span></div>
+   <div class="instruction"><b><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg></b><span>向左</span></div>
+   <div class="instruction"><b><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M12 20V5m-6 6 6-6 6 6"/></svg></b><span>旋转</span></div>
+   <div class="instruction"><b><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></b><span>向右</span></div>
+   <div class="instruction"><b><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M12 4v15m-6-6 6 6 6-6"/></svg></b><span>加速</span></div>
+   <div class="instruction"><b><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M12 3v13m-5-5 5 5 5-5M5 21h14"/></svg></b><span>落下</span></div>
   </div>
-  <p class="scoring" id="scoring">2000 / Good　5000 / Fantastic　8000 / Perfect<br>P 暂停或继续，R 重新开始。</p>
-  <button class="primary" id="confirm"><span id="confirmLabel">明白了，开始游戏</span><svg class="icon " viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
-  <p class="audio-note" id="audioNote">开始后播放背景音乐，可在顶部关闭。</p>
+  <button class="primary" id="confirm"><span id="confirmLabel">开始游戏</span><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" draggable="false"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
  </section>
 </div>
 <script>
@@ -55,7 +52,7 @@ const shapes = [
  [[1,0],[0,1],[1,1],[2,1]], [[1,0],[2,0],[0,1],[1,1]],
  [[0,0],[1,0],[1,1],[2,1]], [[0,0],[0,1],[1,1],[2,1]], [[2,0],[0,1],[1,1],[2,1]]
 ];
-const colors = ['#188c8d','#d5a01f','#9a5793','#4c9b68','#d9614d','#427eaa','#c47e32'];
+const colors = ['#25cde8','#ffd040','#aa6df2','#50d785','#f15e74','#4e83f3','#f69a36'];
 const icons = {"music": "<svg class=\"icon \" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\" draggable=\"false\"><path d=\"M9 18V5l11-2v13M9 8l11-2\"/><ellipse cx=\"6\" cy=\"18\" rx=\"3\" ry=\"2\"/><ellipse cx=\"17\" cy=\"16\" rx=\"3\" ry=\"2\"/></svg>", "sound": "<svg class=\"icon \" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\" draggable=\"false\"><path d=\"m11 5-5 4H3v6h3l5 4V5zm4 3a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14\"/></svg>"};
 const $ = id => document.getElementById(id);
 const canvas = $('board'), ctx = canvas.getContext('2d');
@@ -65,7 +62,7 @@ let running = false, paused = false, over = false, cell = 25;
 let lastTime = 0, accumulator = 0, clearing = null, particles = [], dropTrail = null;
 let modalMode = 'intro', returnFocus = null, cheerQueue = [], cheer = null;
 const reached = new Set(), repeatStops = new Set();
-const milestones = [{score:2000,word:'Good!',detail:'2000 分 · 不错，稳住节奏。'}, {score:5000,word:'Fantastic!',detail:'5000 分 · 漂亮，继续。'}, {score:8000,word:'Perfect!',detail:'8000 分 · 出色的一局。'}];
+const milestones = [{score:2000,word:'Good!',detail:'2000 分'}, {score:5000,word:'Fantastic!',detail:'5000 分'}, {score:8000,word:'Perfect!',detail:'8000 分'}];
 
 // All sound is synthesized locally: no downloads, third-party audio, or network requests.
 const audio = (() => {
@@ -78,7 +75,8 @@ const audio = (() => {
   for (const [id,on,label] of [['music',musicOn,'背景音乐'],['sound',soundOn,'游戏音效']]) {
    $(id).setAttribute('aria-pressed',String(on));
    $(id).setAttribute('aria-label',label+'，点击'+(on?'关闭':'开启'));
-   $(id).innerHTML=icons[id]+(id==='music'?'音乐':'音效')+'<span>'+(on?'开':'关')+'</span>';
+   $(id).innerHTML=icons[id];
+   $(id).setAttribute('title',label+(on?'：开':'：关'));
   }
  }
  function tone(freq,time,duration,volume,bus,type='sine',endFreq) {
@@ -161,7 +159,7 @@ function spawn(){current=randomPiece();if(!valid(current))gameOver();}
 function addScore(points){
  score+=points;$('score').textContent=score;
  for(const milestone of milestones)if(score>=milestone.score&&!reached.has(milestone.score)){
-  reached.add(milestone.score);cheerQueue.push(milestone);document.querySelector('[data-score="'+milestone.score+'"]').classList.add('achieved');
+  reached.add(milestone.score);cheerQueue.push(milestone);document.querySelector('[data-score="'+milestone.score+'"]')?.classList.add('achieved');
  }
  nextCheer();
 }
@@ -181,10 +179,11 @@ function reset(){
 function showModal(mode){
  stopInputs();modalMode=mode;returnFocus=document.activeElement;
  const intro=mode==='intro'||mode==='restart',help=mode==='help';
- $('dialogTitle').textContent=intro?(mode==='restart'?'重新开始':'开始之前'):help?'操作说明':mode==='over'?'本局结束':'游戏已暂停';
- $('dialogDesc').innerHTML=mode==='over'?'本局得分 <b>'+score+'</b>。<br>准备好后，可以再来一局。':intro||help?'填满一整行即可消除。<br>方块堆到顶部时，本局结束。':'方块与音乐已暂停。<br>准备好后，继续这一局。';
- $('instructions').hidden=!(intro||help);$('scoring').hidden=!(intro||help);$('audioNote').hidden=!(intro||help);
- $('confirmLabel').textContent=intro?(mode==='restart'?'明白了，重新开始':'明白了，开始游戏'):mode==='over'?'再玩一局':'明白了，继续游戏';
+ $('dialogTitle').textContent=intro?(mode==='restart'?'重新开始？':'俄罗斯方块'):help?'玩法':mode==='over'?'游戏结束':'暂停';
+ $('dialogDesc').innerHTML=mode==='over'?'得分 <b>'+score+'</b>':intro||help?'排满一行，即可消除':'';
+ $('dialogDesc').hidden=!(intro||help||mode==='over');
+ $('instructions').hidden=!(intro||help);
+ $('confirmLabel').textContent=intro?(mode==='restart'?'重新开始':'开始游戏'):mode==='over'?'再来一局':'继续游戏';
  $('modal').hidden=false;$('app').inert=true;$('confirm').focus();audio.sync();
 }
 function closeModal(){
@@ -242,7 +241,9 @@ function tile(x,y,color,ghost=false){
  const p=Math.max(1.3,cell*.07),s=cell-p*2;
  if(ghost){ctx.strokeStyle=color;ctx.globalAlpha=.38;ctx.lineWidth=1.5;rounded(x*cell+p+1,y*cell+p+1,s-2,s-2,Math.min(2,cell*.08));ctx.stroke();ctx.globalAlpha=1;return;}
  rounded(x*cell+p,y*cell+p,s,s,Math.min(2,cell*.08));ctx.fillStyle=color;ctx.fill();
- ctx.strokeStyle='#344b3b33';ctx.lineWidth=.7;ctx.stroke();
+ ctx.strokeStyle='#ffffff33';ctx.lineWidth=.7;ctx.stroke();
+ ctx.fillStyle='#ffffff40';ctx.fillRect(x*cell+p+1,y*cell+p+1,s-2,Math.max(1,cell*.08));
+ ctx.fillStyle='#00000033';ctx.fillRect(x*cell+p+1,y*cell+p+s-Math.max(2,cell*.09),s-2,Math.max(1,cell*.07));
 }
 function resize(){
  const app=$('app'),wrap=$('boardWrap');
@@ -259,13 +260,13 @@ function resize(){
 function draw(){
  const w=cell*COLS,h=cell*ROWS;ctx.clearRect(0,0,w,h);
  for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
-  ctx.fillStyle=(x+y)%2?'#eee9d2':'#f2ecd6';ctx.fillRect(x*cell,y*cell,cell,cell);
-  ctx.strokeStyle='#79907426';ctx.lineWidth=.6;ctx.strokeRect(x*cell,y*cell,cell,cell);
+  ctx.fillStyle=(x+y)%2?'#0b1425':'#0c1628';ctx.fillRect(x*cell,y*cell,cell,cell);
+  ctx.strokeStyle='#25385585';ctx.lineWidth=.6;ctx.strokeRect(x*cell,y*cell,cell,cell);
   if(board[y][x]!==-1)tile(x,y,colors[board[y][x]]);
  }
  if(dropTrail){
   ctx.save();ctx.globalAlpha=.25*(1-dropTrail.elapsed/200);
-  for(const [dx,dy] of dropTrail.shape){const gradient=ctx.createLinearGradient(0,(dropTrail.from+dy)*cell,0,(dropTrail.to+dy+1)*cell);gradient.addColorStop(0,'#f3ecd700');gradient.addColorStop(1,dropTrail.color);ctx.fillStyle=gradient;ctx.fillRect((dropTrail.x+dx)*cell+2,Math.max(0,(dropTrail.from+dy)*cell),cell-4,(dropTrail.to-dropTrail.from+1)*cell);}
+  for(const [dx,dy] of dropTrail.shape){const gradient=ctx.createLinearGradient(0,(dropTrail.from+dy)*cell,0,(dropTrail.to+dy+1)*cell);gradient.addColorStop(0,'#11172800');gradient.addColorStop(1,dropTrail.color);ctx.fillStyle=gradient;ctx.fillRect((dropTrail.x+dx)*cell+2,Math.max(0,(dropTrail.from+dy)*cell),cell-4,(dropTrail.to-dropTrail.from+1)*cell);}
   ctx.restore();
  }
  if(current&&!over){
